@@ -7,6 +7,12 @@
 
 访问地址：[https://annotation.fcpublic.com](https://annotation.fcpublic.com)
 
+### 管理员权限获取
+
+如需体验管理员权限，请添加下方微信二维码联系获取。
+
+<img src="./docs/assets/admin-wechat-qr.jpg" alt="管理员权限获取微信二维码" width="260" />
+
 ## 基础版价格
 
 | 版本 | 价格 | 交付方式 | 是否支持二开 | 适用场景 |
