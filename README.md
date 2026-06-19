@@ -3,6 +3,23 @@
 > 中文名：数据标注工坊  
 > 一个支持私有化部署的数据采集、数据标注、任务管理、审核质检与报表统计平台。
 
+## 在线预览
+
+访问地址：[https://annotation.fcpublic.com](https://annotation.fcpublic.com)
+
+## 基础版价格
+
+| 版本 | 价格 | 交付方式 | 是否支持二开 | 适用场景 |
+| --- | ---: | --- | --- | --- |
+| 源码一次性购买版 | 21000 元 | 源码交付 | 支持 | 私有化部署、深度定制、长期扩展 |
+| 镜像部署版 | 12000 元 | Docker 镜像交付 | 不支持 | 快速部署、标准化使用、低成本上线 |
+
+数据标注工坊基础版提供两种交付方式，用户可根据自身部署、扩展和二次开发需求灵活选择。
+
+源码一次性购买版适合希望长期自主管理、深度定制和持续扩展的平台用户。购买后可获得系统源码，支持本地私有化部署，并可根据业务流程、标注场景、权限体系、报表统计、模型接入等需求进行二次开发。
+
+镜像部署版适合希望快速上线、低成本私有化部署的用户。平台以 Docker 镜像方式交付，部署更简单，环境依赖更清晰，适合标准化使用场景。该版本可正常使用平台已有功能，但不提供源码，因此不支持二次开发和深度定制。
+
 ## 项目简介
 
 DataLab Annotation Studio 是一个面向 AI 数据生产流程的数据标注与数据采集平台，适用于企业内部数据标注团队、AI 实验室、算法团队、数据服务团队以及需要私有化部署的数据生产场景。
@@ -124,3 +141,185 @@ data-annotation-project/
 ├── scripts/                    # 开发与启动脚本
 ├── docker-compose.yml          # Docker 部署配置
 └── .env.docker.example         # Docker 环境变量示例
+```
+
+## Docker 部署
+
+### 1. 克隆项目
+
+```bash
+git clone <your-repository-url>
+cd data-annotation-project
+```
+
+### 2. 创建环境变量文件
+
+```bash
+cp .env.docker.example .env.docker
+```
+
+根据实际部署环境修改 `.env.docker`。
+
+常用配置示例：
+
+```env
+WEB_PORT=8080
+API_PORT=8000
+FILE_PORT=8100
+MODEL_PORT=8200
+
+MYSQL_PORT=3306
+REDIS_PORT=6379
+
+HOST_DATA_ROOT=/data/annotation
+
+INIT_SUPER_ADMIN_ACCOUNT=admin
+INIT_SUPER_ADMIN_PASSWORD=Admin123456
+INIT_SUPER_ADMIN_NAME=管理员
+INIT_SUPER_ADMIN_EMAIL=admin@example.com
+```
+
+### 3. 启动服务
+
+```bash
+docker compose --env-file .env.docker up -d --build
+```
+
+### 4. 访问系统
+
+本地访问：
+
+```text
+http://localhost:8080
+```
+
+服务器部署后访问：
+
+```text
+http://服务器IP:8080
+```
+
+### 5. 查看服务状态
+
+```bash
+docker compose ps
+```
+
+### 6. 查看日志
+
+```bash
+docker compose logs -f api
+docker compose logs -f web
+```
+
+### 7. 停止服务
+
+```bash
+docker compose down
+```
+
+## 本地开发
+
+### 后端 API
+
+```bash
+cd data-annotation-api
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python run.py
+```
+
+### 前端项目
+
+```bash
+cd data-annotation-react
+npm install
+npm run dev
+```
+
+### 本地依赖
+
+本地开发需要准备：
+
+- MySQL
+- Redis
+- Python 运行环境
+- Node.js / npm
+
+示例配置：
+
+```env
+DATABASE_URL=mysql+pymysql://annotation:annotation_pass@127.0.0.1:3306/data_annotation?charset=utf8mb4
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+```
+
+## 邮件验证码配置
+
+平台支持阿里云 DirectMail 邮件推送，用于注册验证码和找回密码验证码。
+
+示例配置：
+
+```env
+ALIYUN_DM_ACCESS_KEY_ID=
+ALIYUN_DM_ACCESS_KEY_SECRET=
+ALIYUN_DM_REGION_ID=cn-hangzhou
+ALIYUN_DM_ENDPOINT=dm.aliyuncs.com
+ALIYUN_DM_FROM_EMAIL=
+ALIYUN_DM_FROM_ALIAS=数据标注工坊
+ALIYUN_DM_REGISTER_TEMPLATE_ID=
+ALIYUN_DM_RESET_TEMPLATE_ID=
+ALIYUN_DM_TEMPLATE_PLATFORM_KEY=platform_name
+ALIYUN_DM_TEMPLATE_CODE_KEY=code
+ALIYUN_DM_TEMPLATE_EXPIRE_KEY=expire_minutes
+```
+
+## 脚本采集运行环境
+
+平台支持通过 Docker 沙箱执行数据采集脚本。
+
+可配置内容包括：
+
+- Python 基础镜像
+- Python 依赖包
+- CPU 和内存限制
+- 网络模式
+- 输出目录
+- 环境变量
+- 额外挂载目录
+- 设备访问权限
+
+采集脚本执行后，可以在平台中查看运行日志、下载采集结果，并选择需要提交的采集文件。
+
+## 模型服务接入
+
+平台支持 HTTP 方式接入外部模型服务，可用于模型预处理、辅助标注等场景。
+
+模型接入示例位于：
+
+```text
+data-annotation-model/examples/
+```
+
+## 适用场景
+
+- 企业内部数据标注平台
+- AI 训练数据生产
+- 计算机视觉数据标注
+- NLP 文本标注
+- 音视频数据标注
+- 3D 点云数据标注
+- 数据采集与数据清洗流程
+- 标注团队任务管理
+- 私有化部署的数据生产系统
+
+## 推荐仓库描述
+
+```text
+支持私有化部署的数据采集与数据标注平台，覆盖任务管理、审核质检、报表统计和团队协作流程。
+```
+
+## License
+
+本项目适用于私有化部署、企业数据标注流程和 AI 数据生产场景。
